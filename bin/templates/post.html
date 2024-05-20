@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <title>$title$</title>
+  </head>
+  <style></style>
+  <body>
+    <div class="container">
+      <header>headermenu</header>
+      <main>
+        <div>
+          <h3>$title$</h3>
+          <p>creationdate</p>
+        </div>
+        <section>$body$</section>
+      </main>
+      <footer>
+        <hr />
+        <p>modificationdate</p>
+      </footer>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const footnotes = document.querySelector(".footnotes");
+
+          if (footnotes) {
+            const lis = footnotes.querySelectorAll("li");
+
+            for (const i in lis) {
+              const number = Number(i) + 1;
+              const fnref = document.getElementById("fnref" + number);
+
+              if (fnref) {
+                const paragraph = fnref.parentNode;
+                paragraph.prepend(lis[i]);
+                const sup = document.createElement("sup");
+                sup.textContent = number;
+
+                lis[i].className = "sidenote" + " " + number;
+                const p = lis[i].querySelector("p");
+                p.prepend(sup);
+
+                const footnoteBack = paragraph.querySelector(".footnote-back");
+
+                if (footnoteBack) {
+                  footnoteBack.remove();
+                }
+              }
+            }
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+build
+bin/configure_routes.sh
+bin/deploy.sh
+bin/validator.sh
+bin/bin.sh
+bin/configs.conf
+bin/routes.conf
