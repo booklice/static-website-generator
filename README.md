@@ -3,7 +3,11 @@
 Simple static website generator written with bash script, pandoc.
 it requires [pandoc](https://pandoc.org/installing.html) and [imagemagick](https://imagemagick.org/script/download.php).
 
-**routes.conf**
+## configs
+
+`touch ./bin/routes.conf && touch ./bin/configs.conf`
+
+##### routes.conf
 
 ```
 about=single
@@ -11,7 +15,7 @@ blog=multiple
 portfolio=multiple
 ```
 
-**configs.conf**
+##### configs.conf
 
 ```
 MD_DIRECTORY=""
@@ -20,8 +24,8 @@ TEMPLATES_DIRECTORY="./templates"
 ASSETS_DIRECTORY="../build/assets"
 ROUTES_CONF="./routes.conf"
 
-BASE_URL=""
-TITLE=""
+BASE_URL="HTTPS://WHATEVER.COM"
+TITLE="WEBSITE TITLE"
 
 # rss feed template
 RSS_TEMPLATE="<?xml version='1.0' encoding='UTF-8' ?>
@@ -44,3 +48,5 @@ ITEM_TEMPLATE='<item> \
                     <atom:link href="{{ATOM_LINK}}" rel="self" type="application/rss+xml" /> \
                 </item>'
 ```
+
+`bash build_macos.sh` or `bash_linux.sh` based on your os.
