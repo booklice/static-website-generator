@@ -91,7 +91,7 @@ function initialDirectories() {
                 pandoc "$represent_md_file" --template="${template_html}" --css="./styles.css" --output="$output_html"
                 local modification_date=$(stat -f "%Sm" -t "%s" "$output_html")
                 local modified=$(date -r "${modification_date}" "+%Y-%m-%d %H:%M:%S")
-                find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whereami/$(printf '%s\n' "$(echo $route_menu)" | sed -e 's/[\/&]/\\&/g')/g" {} \;
+                find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whatmenu/$(printf '%s\n' "$(echo $route_menu)" | sed -e 's/[\/&]/\\&/g')/g" {} \;
                 find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\modificationdate/$(printf '%s\n' "Last modified ${modified}" | sed -e 's/[\/&]/\\&/g')/g" {} \;
             fi
         fi
@@ -103,7 +103,7 @@ function initialDirectories() {
     cp -p "$TEMPLATES_DIRECTORY/index.html" "$BUILD_DIRECTORY"
     local modification_date=$(stat -f "%Sm" -t "%s" "$home_html")
     local modified=$(date -r "${modification_date}" "+%Y-%m-%d %H:%M:%S")
-    find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whereami/$(printf '%s\n' "$(echo $TITLE)" | sed -e 's/[\/&]/\\&/g')/g" {} \;
+    find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whatmenu/$(printf '%s\n' "$(echo $TITLE)" | sed -e 's/[\/&]/\\&/g')/g" {} \;
     find "${home_html}" -exec sed -i '' -e "s/\modificationdate/$(printf '%s\n' "Last modified ${modified}" | sed -e 's/[\/&]/\\&/g')/g" {} \;
     handleAssets $home_html
 }
@@ -174,7 +174,7 @@ function generateHTMLPages() {
             local created=$(date -r "${creation_date}" "+%Y-%m-%d %H:%M:%S")
             local modified=$(date -r "${modification_date}" "+%Y-%m-%d %H:%M:%S")
 
-            find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whereami/$(printf '%s\n' "$(echo "$menu")" | sed -e 's/[\/&]/\\&/g')/g" {} \;
+            find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\whatmenu/$(printf '%s\n' "$(echo "$menu")" | sed -e 's/[\/&]/\\&/g')/g" {} \;
             find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\creationdate/$(printf '%s\n' "$(echo "$created" | tr "/" " ")" | sed -e 's/[\/&]/\\&/g')/g" {} \;
             find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\modificationdate/$(printf '%s\n' "Last modified ${modified}" | sed -e 's/[\/&]/\\&/g')/g" {} \;
             find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\headermenu/$(printf '%s\n' "${header_menu}" | sed -e 's/[\/&]/\\&/g')/g" {} \;
@@ -266,7 +266,7 @@ function generatePostsList() {
         if [[ $type == "multiple" ]]; then 
             build_menu_folder="${BUILD_DIRECTORY}/${menu}"
 
-            posts_ul="<div><ul>"
+            posts_ul="<ul class="$menu-list">"
             for each in "${sorted_posts[@]}"; do
                 read -r -a parts <<< "$each"
                 local md_slug="${parts[0]}"
@@ -275,13 +275,13 @@ function generatePostsList() {
                 local md_creation_date="${parts[2]}"
                 local md_file="${md_slug}.md"
                 
-                if [[ $menu == $md_menu ]]; then
+                if [[ $menu == $md_menu && $menu != $md_slug ]]; then
                     date=$(date -r "${md_creation_date}" "+%Y-%m-%d %H:%M:%S")
-                    posts_ul+="<li data-date=$date><a href=\"./${md_slug}.html\">${md_title}</a><span> - ${date}</span></li>"
+                    posts_ul+="<li data-date="$md_creation_date"><a class="title" href=\"./${md_slug}.html\">${md_title}</a><span class="date"> - ${date}</span></li>"
                     ((post_count++))
                 fi
             done
-            posts_ul+="</ul></div>"
+            posts_ul+="</ul>"
 
             echo "  • $menu - total $post_count"
 
