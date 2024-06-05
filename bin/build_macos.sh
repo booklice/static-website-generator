@@ -98,17 +98,19 @@ function initialDirectories() {
         fi
     done < "$ROUTES_CONF"
     
+    # for main page
+    home_md="$MD_DIRECTORY/index.md"
     home_html="${BUILD_DIRECTORY}/index.html"
-    if [[ -f "$MD_DIRECTORY/index.md" ]]; then
-        echo "found home md file"
-        pandoc "$MD_DIRECTORY/index.md" --template="$TEMPLATES_DIRECTORY/index.html" --css="./styles.css" --output="$home_html"
-        modification_date=$(stat -f "%Sm" -t "%s" "$MD_DIRECTORY/index.md")
+    if [[ -f "$home_md" ]]; then
+        pandoc "$home_md" --template="$TEMPLATES_DIRECTORY/single.html" --css="./styles.css" --output="$home_html"
+        modification_date=$(stat -f "%Sm" -t "%s" "$home_md")
     else 
-        cp -p "${TEMPLATES_DIRECTORY}/index.html" "$home_html"
+        cp -p "${TEMPLATES_DIRECTORY}/single.html" "$home_html"
         sed -i '' 's/\$body\$//g' "$home_html"
         modification_date=$(stat -f "%Sm" -t "%s" "$home_html")
     fi
     modified=$(date -r "${modification_date}" "+%Y-%m-%d %H:%M:%S")
+    sed -i '' '/<h3 class="menu whatmenu">.*<\/h3>/d' "$home_html"
     find "${BUILD_DIRECTORY}" -name "*.html" -exec sed -i '' -e "s/\\whatmenu/$(printf '%s\n' "$(echo $TITLE)" | sed -e 's/[\/&]/\\&/g')/g" {} \;
     find "${home_html}" -exec sed -i '' -e "s/\\modificationdate/$(printf '%s\n' "Last modified ${modified}" | sed -e 's/[\/&]/\\&/g')/g" {} \;
     handleAssets "$home_html"
