@@ -1,5 +1,7 @@
 .DS_Store
 build
+templates/index.html
+bin/add_goatcounter.sh
 bin/configure_routes.sh
 bin/deploy.sh
 bin/validator.sh

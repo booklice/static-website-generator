@@ -54,19 +54,35 @@ img {
   max-width: 100%;
 }
 
+.footnote-ref {
+  text-decoration: none;
+}
+
+.footnote-ref sup {
+  text-decoration: underline;
+}
+
+.footnote-ref sup::before {
+  content: "[";
+}
+
+.footnote-ref sup::after {
+  content: "]";
+}
+
 .sidenote {
   position: relative;
   list-style: none;
   float: right;
   clear: right;
   max-width: 30%;
-  margin: 4px;
+  margin: 6px;
   vertical-align: baseline;
 }
 
 .sidenote p {
   margin: 0;
-  font-size: smaller;
+  font-size: 11px;
 }
 
 .sidenote * {
@@ -78,6 +94,24 @@ img {
 }
 
 .footnotes hr {
+  display: none;
+}
+
+/* /things  */
+.container.things img {
+  width: 300px;
+}
+
+.post-container.things .date {
+  visibility: hidden;
+}
+
+.post-container.things .date::before {
+  content: attr(data-year);
+  visibility: visible;
+}
+
+.list.things .monthandday {
   display: none;
 }
 
